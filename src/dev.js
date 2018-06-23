@@ -26,7 +26,8 @@ class App extends React.Component{
   render(){
     return (
       <div className="hello-react-ant-input-clipboard">
-        <ReactAntInputClipboard onCopy={this._onCopy} ref='rc' />
+        <ReactAntInputClipboard onCopy={this._onCopy} ref='rc1' />
+        <ReactAntInputClipboard onCopy={this._onCopy} ref='rc2' />
       </div>
     );
   }

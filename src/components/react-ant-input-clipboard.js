@@ -21,7 +21,7 @@ export default class extends Component {
 
   get addonAfter() {
     return (
-      <button className="react-ant-input-clipboard-clip-btn">
+      <button ref={(btn) => { this.btn = btn }} className="react-ant-input-clipboard-clip-btn">
         <img width="12" src={require('assets/clippy.svg')} />
       </button>
     )
@@ -38,7 +38,7 @@ export default class extends Component {
 
   createInstance() {
     const { onCopy } = this.props;
-    this._clip = new ClipboardJS('.react-ant-input-clipboard-clip-btn', {
+    this._clip = new ClipboardJS(this.btn, {
       text: () => {
         return this.root.input.value;
       }
