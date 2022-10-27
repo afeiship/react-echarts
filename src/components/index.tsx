@@ -42,6 +42,7 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
   };
 
   private rootRef = React.createRef<HTMLDivElement>();
+  private echartsInstance;
 
   componentDidMount() {
     const { onReady, initOptions, option } = this.props;
@@ -50,9 +51,16 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
     }).then((_) => {
       const echarts = window['echarts'];
       const echartsInstance = echarts.init(this.rootRef.current!, initOptions);
-      echartsInstance.setOption(option!);
       onReady!(echartsInstance);
+      echartsInstance.setOption(option!);
+      this.echartsInstance = echartsInstance;
     });
+  }
+
+  shouldComponentUpdate(nextProps: Readonly<ReactEchartsProps>): boolean {
+    const { option } = nextProps;
+    if (this.props.option !== option) this.echartsInstance.setOption(option);
+    return true;
   }
 
   render() {
