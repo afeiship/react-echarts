@@ -5,6 +5,7 @@ import { loadScript } from '@jswork/loadkit';
 import { EChartsOption, ECharts } from 'echarts';
 
 const CLASS_NAME = 'react-echarts';
+const SCRIPT_URL = 'https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js';
 
 declare global {
   interface Window {
@@ -42,25 +43,16 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
   };
 
   private rootRef = React.createRef<HTMLDivElement>();
-  private echartsInstance;
 
   componentDidMount() {
     const { onReady, initOptions, option } = this.props;
-    loadScript('https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js', {
-      id: 'echarts'
-    }).then((_) => {
+    const opts = { id: 'echarts' };
+    loadScript(SCRIPT_URL, opts).then((_) => {
       const echarts = window['echarts'];
       const echartsInstance = echarts.init(this.rootRef.current!, initOptions);
-      onReady!(echartsInstance);
       echartsInstance.setOption(option!);
-      this.echartsInstance = echartsInstance;
+      onReady!(echartsInstance);
     });
-  }
-
-  shouldComponentUpdate(nextProps: Readonly<ReactEchartsProps>): boolean {
-    const { option } = nextProps;
-    if (this.props.option !== option) this.echartsInstance.setOption(option);
-    return true;
   }
 
   render() {

@@ -12,17 +12,7 @@ npm install -S @jswork/react-echarts
 ```
 
 ## usage
-1. import css
-  ```scss
-  @import "~@jswork/react-echarts/dist/style.css";
-
-  // or use sass
-  @import "~@jswork/react-echarts/dist/style.scss";
-
-  // customize your styles:
-  $react-echarts-options: ()
-  ```
-2. import js
+import js
   ```js
 __GENERATE_DAPP__
   ```
