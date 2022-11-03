@@ -34,7 +34,7 @@ export type ReactEchartsProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * Main echarts script URL.
    */
-  scriptURL?: string
+  scriptURL?: string;
 };
 
 export default class ReactEcharts extends Component<ReactEchartsProps> {
@@ -52,7 +52,7 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
 
   componentDidMount() {
     const { onReady, scriptURL, initOptions, option } = this.props;
-    const opts = { id: 'echarts' };
+    const opts = { id: 'ck__echarts' };
     loadScript(scriptURL!, opts).then((_) => {
       const echarts = window['echarts'];
       const echartsInstance = echarts.init(this.rootRef.current!, initOptions);
@@ -69,7 +69,7 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
   }
 
   render() {
-    const { className, option, initOptions, onReady, ...props } = this.props;
+    const { className, option, initOptions, onReady, scriptURL, ...props } = this.props;
     return (
       <div
         ref={this.rootRef}

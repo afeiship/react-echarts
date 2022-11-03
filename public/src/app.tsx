@@ -53,7 +53,6 @@ export default (props: any) => {
   };
 
   useEffect(() => {
-    console.log('instance: ', instance);
     window['ins'] = instance;
   }, [instance]);
 
@@ -65,10 +64,20 @@ export default (props: any) => {
         option={opt}
       />
 
-      <button onClick={e => {
-        setOpt(opt2);
-        instance.setOption(opt2);
-      }}>SetNewOption
+      <hr />
+
+      <ReactEcharts
+        onReady={(e) => setInstance(e)}
+        style={{ width: '100%', height: 200, border: '1px solid red' }}
+        option={opt}
+      />
+
+      <button
+        onClick={(e) => {
+          setOpt(opt2);
+          instance.setOption(opt2);
+        }}>
+        SetNewOption
       </button>
     </Container>
   );
