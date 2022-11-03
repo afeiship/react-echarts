@@ -31,6 +31,10 @@ export type ReactEchartsProps = React.HTMLAttributes<HTMLDivElement> & {
    * The echarts options.
    */
   option?: EChartsOption;
+  /**
+   * Main echarts script URL.
+   */
+  scriptURL?: string
 };
 
 export default class ReactEcharts extends Component<ReactEchartsProps> {
@@ -39,7 +43,8 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
   static defaultProps = {
     onReady: noop,
     initOptions: {},
-    option: {}
+    option: {},
+    scriptURL: SCRIPT_URL
   };
 
   private rootRef = React.createRef<HTMLDivElement>();
