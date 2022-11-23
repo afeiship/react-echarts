@@ -1,7 +1,7 @@
 {
   "name": "@jswork/react-echarts",
   "homepage": "https://js.work",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Echarts for react.",
   "license": "MIT",
   "main": "dist/index.js",
