@@ -64,7 +64,9 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
 
   shouldComponentUpdate(nextProps: Readonly<ReactEchartsProps>): boolean {
     const { option } = nextProps;
-    if (option !== this.props.option) this.echartsInstance.setOption(option!);
+    if (option !== this.props.option) {
+      this.echartsInstance?.setOption(option!);
+    }
     return true;
   }
 
