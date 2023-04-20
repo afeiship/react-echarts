@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import React, { Component } from 'react';
 import { loadScript } from '@jswork/loadkit';
 import { EChartsOption, ECharts } from 'echarts';
+
+// @ts-ignore
 import SpinnerSVG from './spinner-1s-200px.svg';
 
 const CLASS_NAME = 'react-echarts';
