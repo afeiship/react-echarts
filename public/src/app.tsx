@@ -1,4 +1,3 @@
-// @ts-ignore
 import React, { useEffect, useState } from 'react';
 import ReactEcharts from '../../src/main';
 import styled from 'styled-components';
@@ -8,9 +7,9 @@ const Container = styled.div`
   margin: 30px auto 0;
 `;
 
-export default (props: any) => {
-  const [instance, setInstance] = useState();
-  const [opt, setOpt] = useState({
+export default () => {
+  const [instance, setInstance] = useState<any>();
+  const [opt, setOpt] = useState<any>({
     title: {
       text: 'ECharts 入门示例'
     },
@@ -73,7 +72,7 @@ export default (props: any) => {
       />
 
       <button
-        onClick={(e) => {
+        onClick={() => {
           setOpt(opt2);
           instance.setOption(opt2);
         }}>

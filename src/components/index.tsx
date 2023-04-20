@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import React, { Component } from 'react';
 import { loadScript } from '@jswork/loadkit';
 import { EChartsOption, ECharts } from 'echarts';
+import SpinnerSVG from './spinner-1s-200px.svg';
 
 const CLASS_NAME = 'react-echarts';
 const SCRIPT_URL = 'https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js';
@@ -77,8 +78,11 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
         ref={this.rootRef}
         data-component={CLASS_NAME}
         className={classNames(CLASS_NAME, className)}
-        {...props}
-      />
+        {...props}>
+        <figure className={`${CLASS_NAME}__spinner`}>
+          <img src={SpinnerSVG} />
+        </figure>
+      </div>
     );
   }
 }
