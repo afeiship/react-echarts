@@ -18,9 +18,6 @@ npm install -S @jswork/react-echarts
 
   // or use sass
   @import "~@jswork/react-echarts/dist/style.scss";
-
-  // customize your styles:
-  $react-echarts-options: ()
   ```
 2. import js
   ```js

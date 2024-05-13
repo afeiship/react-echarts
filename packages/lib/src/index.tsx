@@ -2,7 +2,7 @@ import noop from '@jswork/noop';
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import { loadScript } from '@jswork/loadkit';
-import { EChartsOption, ECharts } from 'echarts';
+import type { EChartOption, ECharts } from 'echarts';
 
 // @ts-ignore
 import SpinnerSVG from './spinner-1s-200px.svg';
@@ -33,7 +33,7 @@ export type ReactEchartsProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * The echarts options.
    */
-  option?: EChartsOption;
+  option?: EChartOption;
   /**
    * Main echarts script URL.
    */
@@ -47,7 +47,7 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
     onReady: noop,
     initOptions: {},
     option: {},
-    scriptURL: SCRIPT_URL
+    scriptURL: SCRIPT_URL,
   };
 
   private rootRef = React.createRef<HTMLDivElement>();
@@ -82,7 +82,7 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
         className={classNames(CLASS_NAME, className)}
         {...props}>
         <figure className={`${CLASS_NAME}__spinner`}>
-          <img src={SpinnerSVG} />
+          <img src={SpinnerSVG} alt="loading" role="presentation" aria-hidden="true" />
         </figure>
       </div>
     );
