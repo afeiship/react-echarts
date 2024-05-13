@@ -51,7 +51,7 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
   };
 
   private rootRef = React.createRef<HTMLDivElement>();
-  private echartsInstance: ECharts;
+  private echartsInstance: ECharts | null = null;
 
   componentDidMount() {
     const { onReady, scriptURL, initOptions, option } = this.props;

@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import ReactEcharts from '@jswork/react-echarts/src';
 import './index.css';
 import '@jswork/react-echarts/src/style.scss';
+import type { ECharts } from 'echarts';
 
 function App() {
-  const [instance, setInstance] = useState();
+  const [instance, setInstance] = useState<ECharts>();
   const [opt, setOpt] = useState({
     title: {
       text: 'ECharts 入门示例',
@@ -70,7 +71,7 @@ function App() {
       <button
         onClick={() => {
           setOpt(opt2);
-          instance.setOption(opt2);
+          instance!.setOption(opt2);
         }}>
         SetNewOption
       </button>
