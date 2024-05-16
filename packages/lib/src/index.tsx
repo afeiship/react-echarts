@@ -81,9 +81,9 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
         data-component={CLASS_NAME}
         className={classNames(CLASS_NAME, className)}
         {...props}>
-        <figure className={`${CLASS_NAME}__spinner`}>
+        <div className={`${CLASS_NAME}__spinner`}>
           <img src={SpinnerSVG} alt="loading" role="presentation" aria-hidden="true" />
-        </figure>
+        </div>
       </div>
     );
   }
