@@ -76,22 +76,25 @@ npm install -S @jswork/react-echarts
     }, [instance]);
 
     return (
-      <div className="app wp-8 mx-auto mt-8 y-2">
+      <div className="app wp-6 mx-auto mt-8 y-2">
         <ReactEcharts
           onReady={(e) => setInstance(e)}
-          style={{ width: '100%', height: 500, border: '1px solid blue' }}
+          className="border border-solid border-gray-300 p-5 rounded-md"
+          style={{ width: '100%', height: 500 }}
           option={opt}
         />
 
-        <hr />
+        <hr className="my-2" />
 
         <ReactEcharts
           onReady={(e) => setInstance(e)}
-          style={{ width: '100%', height: 200, border: '1px solid red' }}
+          className="border border-solid border-gray-300 p-5 rounded-md"
+          style={{ width: '100%', height: 300 }}
           option={opt}
         />
 
         <button
+          className="btn btn-primary mt-4"
           onClick={() => {
             setOpt(opt2);
             instance!.setOption(opt2);
