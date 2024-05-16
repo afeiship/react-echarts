@@ -24,7 +24,7 @@ npm install -S @jswork/react-echarts
   import { useEffect, useState } from 'react';
   import ReactEcharts from '@jswork/react-echarts';
   import './index.css';
-  import '@jswork/react-echarts/dist/style.scss';
+  import '@jswork/react-echarts/style.scss';
   import type { ECharts } from 'echarts';
 
   function App() {

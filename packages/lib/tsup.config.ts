@@ -14,6 +14,9 @@ export default defineConfig({
   target: 'es6',
   bundle: true,
   external: ['react', 'react-dom'],
+  loader: {
+    '.svg': 'dataurl',
+  },
   outExtension({ format }) {
     return {
       js: `.${format}.js`,

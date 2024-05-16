@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ReactEcharts from '@jswork/react-echarts/src';
+import ReactEcharts from '@jswork/react-echarts';
 import './index.css';
 import '@jswork/react-echarts/src/style.scss';
 import type { ECharts } from 'echarts';
