@@ -29,7 +29,12 @@ export type ReactEchartsProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * Echarts init options.
    */
-  initOptions?: any;
+  initOptions?: {
+    devicePixelRatio?: number;
+    renderer?: string;
+    width?: number | string;
+    height?: number | string;
+  };
   /**
    * The echarts options.
    */
