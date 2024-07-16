@@ -62,7 +62,7 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
     const { onReady, scriptURL, initOptions, option } = this.props;
     const opts = { id: 'ck__echarts' };
     loadScript(scriptURL!, opts).then((_) => {
-      const echarts = window['echarts'];
+      const echarts = window['echarts'] as any;
       const echartsInstance = echarts.init(this.rootRef.current!, initOptions);
       echartsInstance.setOption(option!);
       onReady!(echartsInstance);
