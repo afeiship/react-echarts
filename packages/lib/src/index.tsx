@@ -78,6 +78,10 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
     return true;
   }
 
+  componentWillUnmount() {
+    this.echartsInstance?.dispose();
+  }
+
   render() {
     const { className, option, initOptions, onReady, scriptURL, ...props } = this.props;
     return (
