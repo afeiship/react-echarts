@@ -80,12 +80,23 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
 
   async componentDidMount() {
     const { onReady, initOptions, option } = this.props;
-    const echarts = await this.loadEcharts() as any;
-    const echartsInstance = echarts.init(this.rootRef.current!, initOptions);
-    echartsInstance.setOption(option!);
-    onReady?.({ chart: echartsInstance, echarts });
-    this.echartsInstance = echartsInstance;
-    this.harmonyEvents = ReactHarmonyEvents.create(this);
+    const { current } = this.rootRef;
+
+    if (!current) {
+      console.error('rootRef is not available');
+      return;
+    }
+
+    try {
+      const echarts = await this.loadEcharts() as any;
+      const echartsInstance = echarts.init(current, initOptions);
+      echartsInstance.setOption(option!);
+      onReady?.({ chart: echartsInstance, echarts });
+      this.echartsInstance = echartsInstance;
+      this.harmonyEvents = ReactHarmonyEvents.create(this);
+    } catch (error) {
+      console.error('Failed to initialize ECharts:', error);
+    }
   }
 
   shouldComponentUpdate(nextProps: Readonly<ReactEchartsProps>): boolean {
