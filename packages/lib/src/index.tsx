@@ -55,13 +55,19 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
 
   private rootRef = React.createRef<HTMLDivElement>();
   private echartsInstance: ECharts | null = null;
+  private readonly loadOpts: any;
 
-  loadEcharts = (opts) => {
+  constructor(props: ReactEchartsProps) {
+    super(props);
+    this.loadOpts = { id: 'ck__echarts' };
+  }
+
+  loadEcharts = () => {
     const { scriptURL } = this.props;
     const ecScripts = document.querySelectorAll('script[src="' + scriptURL + '"]');
     if (ecScripts.length > 0) return Promise.resolve(window['echarts']);
     return new Promise((resolve) => {
-      loadScript(scriptURL!, opts).then((_) => {
+      loadScript(scriptURL!, this.loadOpts).then((_) => {
         const echarts = window['echarts'] as any;
         resolve(echarts);
       });
@@ -70,8 +76,7 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
 
   async componentDidMount() {
     const { onReady, initOptions, option } = this.props;
-    const opts = { id: 'ck__echarts' };
-    const echarts = await this.loadEcharts(opts) as any;
+    const echarts = await this.loadEcharts() as any;
     const echartsInstance = echarts.init(this.rootRef.current!, initOptions);
     echartsInstance.setOption(option!);
     onReady?.(echartsInstance);
