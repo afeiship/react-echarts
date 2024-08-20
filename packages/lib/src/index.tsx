@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import { loadScript } from '@jswork/loadkit';
+import fde from 'fast-deep-equal';
 import type { EChartOption, ECharts } from 'echarts';
 import type { EventMittNamespace } from '@jswork/event-mitt';
 import { ReactHarmonyEvents } from '@jswork/harmony-events';
@@ -64,7 +65,6 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
     name: '@',
   };
 
-
   static event: EventMittNamespace.EventMitt;
   static events = ['loadEcharts'];
   private harmonyEvents: ReactHarmonyEvents | null = null;
@@ -90,9 +90,9 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
 
   shouldComponentUpdate(nextProps: Readonly<ReactEchartsProps>): boolean {
     const { option } = nextProps;
-    if (option !== this.props.option) {
-      this.echartsInstance?.setOption(option!);
-    }
+    const isEqual = fde(option, this.props.option);
+    if (isEqual) return false;
+    this.echartsInstance?.setOption(option!);
     return true;
   }
 
