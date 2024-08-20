@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "@jswork/loadkit": "^1.0.6",
-    "@jswork/noop": "^1.0.0",
     "@types/echarts": "^4.9.22",
     "classnames": "^2.5.1"
   },

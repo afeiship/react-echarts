@@ -1,4 +1,3 @@
-import noop from '@jswork/noop';
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import { loadScript } from '@jswork/loadkit';
@@ -49,7 +48,6 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
   static displayName = CLASS_NAME;
   static version = '__VERSION__';
   static defaultProps = {
-    onReady: noop,
     initOptions: {},
     option: {},
     scriptURL: SCRIPT_URL,
@@ -58,16 +56,26 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
   private rootRef = React.createRef<HTMLDivElement>();
   private echartsInstance: ECharts | null = null;
 
-  componentDidMount() {
-    const { onReady, scriptURL, initOptions, option } = this.props;
-    const opts = { id: 'ck__echarts' };
-    loadScript(scriptURL!, opts).then((_) => {
-      const echarts = window['echarts'] as any;
-      const echartsInstance = echarts.init(this.rootRef.current!, initOptions);
-      echartsInstance.setOption(option!);
-      onReady!(echartsInstance);
-      this.echartsInstance = echartsInstance;
+  loadEcharts = (opts) => {
+    const { scriptURL } = this.props;
+    const ecScripts = document.querySelectorAll('script[src="' + scriptURL + '"]');
+    if (ecScripts.length > 0) return Promise.resolve(window['echarts']);
+    return new Promise((resolve) => {
+      loadScript(scriptURL!, opts).then((_) => {
+        const echarts = window['echarts'] as any;
+        resolve(echarts);
+      });
     });
+  };
+
+  async componentDidMount() {
+    const { onReady, initOptions, option } = this.props;
+    const opts = { id: 'ck__echarts' };
+    const echarts = await this.loadEcharts(opts) as any;
+    const echartsInstance = echarts.init(this.rootRef.current!, initOptions);
+    echartsInstance.setOption(option!);
+    onReady?.(echartsInstance);
+    this.echartsInstance = echartsInstance;
   }
 
   shouldComponentUpdate(nextProps: Readonly<ReactEchartsProps>): boolean {
