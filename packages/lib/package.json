@@ -1,6 +1,6 @@
 {
   "name": "@jswork/react-echarts",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "main": "dist/main.cjs.js",
   "module": "dist/main.esm.js",
   "types": "dist/main.d.ts",
@@ -14,7 +14,7 @@
   "scripts": {
     "build": "tsup",
     "postbuild": "postsass -s src/style.scss -d dist/style.css -c",
-    "release": "release-it --ci"
+    "release": "release-it"
   },
   "devDependencies": {
     "@swc/core": "^1.3.93",
