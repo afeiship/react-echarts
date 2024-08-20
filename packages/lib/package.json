@@ -1,6 +1,6 @@
 {
   "name": "@jswork/react-echarts",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "main": "dist/main.cjs.js",
   "module": "dist/main.esm.js",
   "types": "dist/main.d.ts",
