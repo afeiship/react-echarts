@@ -1,7 +1,11 @@
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import { loadScript } from '@jswork/loadkit';
+import fde from 'fast-deep-equal';
 import type { EChartOption, ECharts } from 'echarts';
+import type { EventMittNamespace } from '@jswork/event-mitt';
+import { ReactHarmonyEvents } from '@jswork/harmony-events';
+
 
 // @ts-ignore
 import SpinnerSVG from './spinner-1s-200px.svg';
@@ -15,16 +19,23 @@ declare global {
   }
 }
 
+export type OnReadyCallback = (params: { chart: ECharts, echarts: any }) => void;
+
 export type ReactEchartsProps = React.HTMLAttributes<HTMLDivElement> & {
+  /**
+   * The identity name.
+   */
+  name?: string;
   /**
    * The extended className for component.
    */
   className?: string;
   /**
    * When the chart is ready, the callback will be called.
-   * @param inEchartsInstance
+   * @param chart - The echarts instance.
+   * @param echarts - The echarts object.
    */
-  onReady?: (inEchartsInstance: ECharts) => void;
+  onReady?: OnReadyCallback;
   /**
    * Echarts init options.
    */
@@ -51,7 +62,13 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
     initOptions: {},
     option: {},
     scriptURL: SCRIPT_URL,
+    name: '@',
   };
+
+
+  static event: EventMittNamespace.EventMitt;
+  static events = ['loadEcharts'];
+  private harmonyEvents: ReactHarmonyEvents | null = null;
 
   private rootRef = React.createRef<HTMLDivElement>();
   private echartsInstance: ECharts | null = null;
@@ -62,30 +79,20 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
     this.loadOpts = { id: 'ck__echarts' };
   }
 
-  loadEcharts = () => {
-    const { scriptURL } = this.props;
-    const ecScripts = document.querySelectorAll('script[src="' + scriptURL + '"]');
-    if (ecScripts.length > 0) return Promise.resolve(window['echarts']);
-    return new Promise((resolve) => {
-      loadScript(scriptURL!, this.loadOpts).then((_) => {
-        const echarts = window['echarts'] as any;
-        resolve(echarts);
-      });
-    });
-  };
-
   async componentDidMount() {
     const { onReady, initOptions, option } = this.props;
     const echarts = await this.loadEcharts() as any;
     const echartsInstance = echarts.init(this.rootRef.current!, initOptions);
     echartsInstance.setOption(option!);
-    onReady?.(echartsInstance);
+    onReady?.({ chart: echartsInstance, echarts });
     this.echartsInstance = echartsInstance;
+    this.harmonyEvents = ReactHarmonyEvents.create(this);
   }
 
   shouldComponentUpdate(nextProps: Readonly<ReactEchartsProps>): boolean {
     const { option } = nextProps;
-    if (option !== this.props.option) {
+    const isEqual = fde(option, this.props.option);
+    if (!isEqual) {
       this.echartsInstance?.setOption(option!);
     }
     return true;
@@ -93,7 +100,20 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
 
   componentWillUnmount() {
     this.echartsInstance?.dispose();
+    this.harmonyEvents?.destroy();
   }
+
+  /* ----- public eventBus methods ----- */
+  loadEcharts = () => {
+    const { scriptURL } = this.props;
+    if (window['echarts']) return Promise.resolve(window['echarts']);
+    return new Promise((resolve) => {
+      loadScript(scriptURL!, this.loadOpts).then((_) => {
+        const echarts = window['echarts'] as any;
+        resolve(echarts);
+      });
+    });
+  };
 
   render() {
     const { className, option, initOptions, onReady, scriptURL, ...props } = this.props;
