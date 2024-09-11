@@ -22,13 +22,14 @@ npm install -S @jswork/react-echarts
 2. import js
   ```js
   import { useEffect, useState } from 'react';
-  import ReactEcharts from '@jswork/react-echarts';
+  import ReactEcharts, { useCommand } from '@jswork/react-echarts/main';
   import './index.css';
-  import '@jswork/react-echarts/style.scss';
+  import '@jswork/react-echarts/dist/style.scss';
   import type { ECharts } from 'echarts';
 
   function App() {
     const [instance, setInstance] = useState<ECharts>();
+    // const { loadEcharts } = useCommand();
     const [opt, setOpt] = useState({
       title: {
         text: 'ECharts 入门示例',
@@ -73,12 +74,16 @@ npm install -S @jswork/react-echarts
 
     useEffect(() => {
       window['ins'] = instance;
+      // loadEcharts();
+      // loadEcharts().then((echarts) => {
+      //   console.log('echarts: ', echarts);
+      // });
     }, [instance]);
 
     return (
       <div className="app wp-6 mx-auto mt-8 y-2">
         <ReactEcharts
-          onReady={(e) => setInstance(e)}
+          onReady={(e) => setInstance(e.chart)}
           className="border border-solid border-gray-300 p-5 rounded-md"
           style={{ width: '100%', height: 500 }}
           option={opt}
@@ -87,7 +92,7 @@ npm install -S @jswork/react-echarts
         <hr className="my-2" />
 
         <ReactEcharts
-          onReady={(e) => setInstance(e)}
+          onReady={(e) => setInstance(e.chart)}
           className="border border-solid border-gray-300 p-5 rounded-md"
           style={{ width: '100%', height: 300 }}
           option={opt}
