@@ -72,6 +72,7 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
   private rootRef = React.createRef<HTMLDivElement>();
   private echartsInstance: ECharts | null = null;
   private readonly loadOpts: any;
+  private readonly resizeObserver: ResizeObserver | null = null;
 
   constructor(props: ReactEchartsProps) {
     super(props);
@@ -86,6 +87,8 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
       console.error('rootRef is not available');
       return;
     }
+
+    this.attacheResizeEvent();
 
     try {
       const echarts = await this.loadEcharts() as any;
@@ -110,7 +113,18 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
   componentWillUnmount() {
     this.echartsInstance?.dispose();
     this.harmonyEvents?.destroy();
+    this.resizeObserver?.disconnect();
   }
+
+  attacheResizeEvent = () => {
+    const { current } = this.rootRef;
+    const { option } = this.props;
+    if (!current) return;
+    const resizeObserver = new ResizeObserver(() => {
+      this.echartsInstance?.resize(option as any);
+    });
+    resizeObserver.observe(current);
+  };
 
   /* ----- public eventBus methods ----- */
 

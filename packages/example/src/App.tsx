@@ -6,7 +6,7 @@ import type { ECharts } from 'echarts';
 
 function App() {
   const [instance, setInstance] = useState<ECharts>();
-  const { loadEcharts } = useCommand();
+  // const { loadEcharts } = useCommand();
   const [opt, setOpt] = useState({
     title: {
       text: 'ECharts 入门示例',
