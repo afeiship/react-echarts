@@ -6,7 +6,6 @@ import type { EChartOption, ECharts } from 'echarts';
 import type { EventMittNamespace } from '@jswork/event-mitt';
 import { ReactHarmonyEvents } from '@jswork/harmony-events';
 
-
 // @ts-ignore
 import SpinnerSVG from './spinner-1s-200px.svg';
 
@@ -19,7 +18,7 @@ declare global {
   }
 }
 
-export type OnReadyCallback = (params: { chart: ECharts, echarts: any }) => void;
+export type OnReadyCallback = (params: { chart: ECharts; echarts: any }) => void;
 
 export type ReactEchartsProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
@@ -67,12 +66,11 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
 
   static event: EventMittNamespace.EventMitt;
   static events = ['loadEcharts'];
+  private readonly loadOpts: any;
   private harmonyEvents: ReactHarmonyEvents | null = null;
-
   private rootRef = React.createRef<HTMLDivElement>();
   private echartsInstance: ECharts | null = null;
-  private readonly loadOpts: any;
-  private readonly resizeObserver: ResizeObserver | null = null;
+  private resizeObserver: ResizeObserver | null = null;
 
   constructor(props: ReactEchartsProps) {
     super(props);
@@ -91,7 +89,7 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
     this.attacheResizeEvent();
 
     try {
-      const echarts = await this.loadEcharts() as any;
+      const echarts = (await this.loadEcharts()) as any;
       const echartsInstance = echarts.init(current, initOptions);
       echartsInstance.setOption(option!);
       onReady?.({ chart: echartsInstance, echarts });
@@ -120,10 +118,10 @@ export default class ReactEcharts extends Component<ReactEchartsProps> {
     const { current } = this.rootRef;
     const { option } = this.props;
     if (!current) return;
-    const resizeObserver = new ResizeObserver(() => {
+    this.resizeObserver = new ResizeObserver(() => {
       this.echartsInstance?.resize(option as any);
     });
-    resizeObserver.observe(current);
+    this.resizeObserver.observe(current);
   };
 
   /* ----- public eventBus methods ----- */
