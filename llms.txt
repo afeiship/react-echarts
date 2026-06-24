@@ -1,0 +1,239 @@
+# @jswork/react-echarts
+
+> React wrapper component for Apache ECharts - a powerful charting library.
+
+## Installation
+
+```bash
+npm install @jswork/react-echarts
+# or
+yarn add @jswork/react-echarts
+```
+
+## Peer Dependencies
+
+This package requires:
+- `react` >= 18.2.0
+- `react-dom` >= 18.2.0
+- `@jswork/event-mitt` ^2.0.9
+- `@jswork/harmony-events` ^1.2.7
+
+## Basic Usage
+
+```tsx
+import ReactEcharts from '@jswork/react-echarts';
+
+function App() {
+  const option = {
+    title: { text: 'ECharts Demo' },
+    tooltip: {},
+    xAxis: { data: ['A', 'B', 'C', 'D', 'E'] },
+    yAxis: {},
+    series: [{ name: 'Sales', type: 'bar', data: [5, 20, 36, 10, 10] }]
+  };
+
+  return (
+    <ReactEcharts
+      style={{ width: '100%', height: '400px' }}
+      option={option}
+      onReady={({ chart, echarts }) => {
+        console.log('Chart instance:', chart);
+        console.log('ECharts object:', echarts);
+      }}
+    />
+  );
+}
+```
+
+## API Reference
+
+### ReactEcharts Component Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `name` | `string` | `'@'` | Identity name for event bus integration |
+| `className` | `string` | - | Extended CSS class name |
+| `option` | `EChartOption` | `{}` | ECharts configuration option (required) |
+| `initOptions` | `object` | `{}` | ECharts initialization options |
+| `scriptURL` | `string` | CDN URL | URL to load ECharts script |
+| `onReady` | `function` | - | Callback when chart is initialized |
+| ...standard HTML div props | - | - | All standard `React.HTMLAttributes<HTMLDivElement>` are supported |
+
+#### initOptions Details
+
+```typescript
+initOptions?: {
+  devicePixelRatio?: number;   // Pixel ratio
+  renderer?: string;           // 'canvas' or 'svg'
+  width?: number | string;     // Chart width
+  height?: number | string;    // Chart height
+}
+```
+
+#### onReady Callback
+
+```typescript
+type OnReadyCallback = (params: { chart: ECharts; echarts: any }) => void;
+```
+
+- `chart`: The initialized ECharts instance
+- `echarts`: The global ECharts object for advanced usage
+
+### useCommand Hook
+
+A hook for interacting with the component via event bus:
+
+```tsx
+import { useCommand } from '@jswork/react-echarts';
+
+function MyComponent() {
+  const { loadEcharts } = useCommand(); // uses default name '@'
+  // or custom name: useCommand('myChart')
+
+  const handleClick = () => {
+    loadEcharts(); // triggers chart reload
+  };
+
+  return <button onClick={handleClick}>Reload Chart</button>;
+}
+```
+
+## Component Features
+
+### Auto Resize
+
+The component automatically resizes when its container size changes using `ResizeObserver`. No manual resize calls needed.
+
+### Lazy Loading
+
+ECharts script is loaded lazily from CDN (default: `https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js`). You can customize the URL via `scriptURL` prop.
+
+### Loading Spinner
+
+Shows a loading spinner while ECharts is being initialized. Styled via `.react-echarts__spinner` class.
+
+### Smart Re-rendering
+
+Uses `fast-deep-equal` to compare options - only updates chart when `option` prop actually changes, preventing unnecessary re-renders.
+
+### Event Bus Integration
+
+Static properties for cross-component communication:
+- `ReactEcharts.event`: EventMitt instance
+- `ReactEcharts.events`: Array of supported events (`['loadEcharts']`)
+
+## Styling
+
+Import the stylesheet:
+
+```tsx
+import '@jswork/react-echarts/dist/style.css';
+```
+
+CSS classes:
+- `.react-echarts` - Main container
+- `.react-echarts__spinner` - Loading spinner wrapper
+
+Custom styling example:
+
+```css
+.react-echarts {
+  width: 100%;
+  height: 500px;
+}
+
+.react-echarts__spinner img {
+  width: 30px; /* smaller spinner */
+}
+```
+
+## TypeScript Support
+
+Full TypeScript support with exported types:
+
+```typescript
+import ReactEcharts, { ReactEchartsProps, useCommand } from '@jswork/react-echarts';
+import type { EChartOption, ECharts } from 'echarts';
+```
+
+## Advanced Examples
+
+### Custom Script URL
+
+```tsx
+<ReactEcharts
+  scriptURL="https://your-domain.com/echarts.min.js"
+  option={option}
+/>
+```
+
+### SVG Renderer
+
+```tsx
+<ReactEcharts
+  initOptions={{ renderer: 'svg' }}
+  option={option}
+/>
+```
+
+### Multiple Charts with Named Instances
+
+```tsx
+<ReactEcharts name="chart1" option={option1} />
+<ReactEcharts name="chart2" option={option2} />
+
+// Use in other component:
+const cmd1 = useCommand('chart1');
+const cmd2 = useCommand('chart2');
+```
+
+### Direct Chart Instance Access
+
+```tsx
+<ReactEcharts
+  option={option}
+  onReady={({ chart, echarts }) => {
+    // Use chart instance directly
+    chart.on('click', (params) => {
+      console.log('Clicked:', params);
+    });
+
+    // Use echarts for advanced features
+    echarts.registerTheme('myTheme', {...});
+  }}
+/>
+```
+
+## Module Exports
+
+```typescript
+// Default export
+export default ReactEcharts;
+
+// Named exports
+export { useCommand };
+export type { ReactEchartsProps };
+```
+
+## Build Outputs
+
+- `dist/main.cjs.js` - CommonJS bundle
+- `dist/main.esm.js` - ES Module bundle
+- `dist/main.d.ts` - TypeScript declarations
+- `dist/style.css` - Compiled styles
+
+## Important Notes
+
+1. **Container Size**: Parent container must have defined dimensions. Chart inherits container size.
+
+2. **Option Updates**: Chart automatically updates when `option` prop changes. Uses deep comparison.
+
+3. **Cleanup**: Component properly disposes chart instance and disconnects ResizeObserver on unmount.
+
+4. **SSR Compatibility**: Script loading happens client-side only. Works with SSR frameworks.
+
+## ECharts Resources
+
+For ECharts configuration options, refer to:
+- [ECharts Option Documentation](https://echarts.apache.org/en/option.html)
+- [ECharts Examples](https://echarts.apache.org/examples/en/)
